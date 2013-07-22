@@ -10,51 +10,28 @@ use OmniAuth::Builder do
   provider :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
 end
 
-class User
-  attr_accessor :id, :name, :nickname, :image
+ROOT = File.dirname(__FILE__)
 
-  def self.from_auth(auth)
-    new.tap do |user|
-      user.id = auth[:uid]
-      user.name = auth[:info][:name]
-      user.nickname = auth[:info][:nickname]
-      user.image = auth[:info][:image]
-    end
-  end
+Dir.glob("{models,controllers}/*").each do |file|
+  require File.join(ROOT, file)
 end
 
-class Demo
-  USER_TEMPLATE = Erubis::Eruby.new(File.read('user.html.erb'))
-  ROOT_PATH = '/'
-  USER_PATH = '/user'
-  SIGNIN_PATH = '/sign-in'
-  SIGNOUT_PATH = '/sign-out'
-  AUTH_CALLBACK_PATH = '/auth/github/callback'
-
-  def call(env)
-    req = Rack::Request.new(env)
-    case req.path_info
-    when USER_PATH
-      body = USER_TEMPLATE.result(user: req.session[:user]).to_s
-      [200, {'Content-Type' => 'text/html'}, [body]]
-    when SIGNIN_PATH
-      [200, {'Content-Type' => 'text/html'}, [File.read('public/signin.html').to_s]]
-    when SIGNOUT_PATH
-      req.session[:user] = nil
-      [301, {'Location' => SIGNIN_PATH}, []]
-    when AUTH_CALLBACK_PATH
-      req.session[:user] = User.from_auth(env['omniauth.auth'])
-      [301, {'Location' => USER_PATH}, []]
-    when ROOT_PATH
-      if req.session[:user] != nil
-        [301, {'Location' => USER_PATH}, []]
+module RackDemo
+  class App
+    def call(env)
+      req = Rack::Request.new(env)
+      case req.path_info
+      when Routes::SIGNIN, Routes::SIGNOUT, Routes::AUTH_CALLBACK then
+        SessionsController.new.call(env)
+      when Routes::USER then
+        ProfileController.new.call(env)
+      when Routes::ROOT then
+        RootController.new.call(env)
       else
-        [301, {'Location' => SIGNIN_PATH}, []]
+        [404, {'Content-Type' => 'text/plain'}, ['Not Found']]
       end
-    else
-      [404, {'Content-Type' => 'text/plain'}, ['Not Found']]
     end
   end
 end
 
-run Demo.new
+run RackDemo::App.new
