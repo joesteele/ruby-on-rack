@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <title>GitHub Auth Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+
+    <div class="navbar navbar-static-top navbar-inverse">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a href='/' class='brand'>GitHub Auth Demo</a>
+          <ul class="nav pull-right">
+            <% if user %>
+              <li>
+                <a href='/sign-out'>
+                  <img style="max-width:20px;" src='<%= user.image %>'/> <%= user.name %>
+                </a>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span12">
+          <% if user %>
+            <h2>
+              Signed in as:
+            </h2>
+            <h3>
+              <img src='<%= user.image %>'/> <%= user.name %>!
+            </h3>
+          <% else %>
+            <h2>
+              Not Signed in!
+            </h2>
+          <% end %>
+          <h4>Profile</h4>
+          <a href='<%= "http://github.com/#{user.nickname}" %>' target="_blank">github/<%= user.nickname %></a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     dotenv (0.8.0)
+    erubis (2.7.0)
     faraday (0.8.7)
       multipart-post (~> 1.1)
     hashie (2.0.5)
@@ -32,5 +33,6 @@ PLATFORMS
 
 DEPENDENCIES
   dotenv
+  erubis
   omniauth-github
   rack
