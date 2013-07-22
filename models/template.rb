@@ -1,12 +1,12 @@
 class Template
-  VIEW_DIR = File.join((ROOT || File.dirname(__FILE__)), 'views')
+  VIEW_DIR = File.join(RackDemo::ROOT, 'views')
 
   def self.templates
     @templates ||= {}
   end
 
   def self.template_for(opts={})
-    path = File.join(*[VIEW_DIR, opts[:controller], opts[:action]].compact)
+    path = File.join(*[VIEW_DIR, opts[:controller].to_s, opts[:action].to_s].compact)
     path += '.erb'
     if File.exists?(path)
       templates[path] ||= Erubis::Eruby.new(File.read(path))

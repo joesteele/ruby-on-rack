@@ -1,10 +1,9 @@
-class RootController
-  def call(env)
-    req = Rack::Request.new(env)
-    if req.session[:user] != nil
-      [301, {'Location' => Routes::USER, 'Cache-Control' => 'no-cache'}, []]
+class RootController < BaseController
+  def index
+    if current_user
+      redirect_to '/user'
     else
-      [301, {'Location' => Routes::SIGNIN, 'Cache-Control' => 'no-cache'}, []]
+      redirect_to '/sign-in'
     end
   end
 end

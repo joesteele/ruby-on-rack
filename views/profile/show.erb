@@ -36,13 +36,13 @@
             <h3>
               <img src='<%= user.image %>'/> <%= user.name %>!
             </h3>
+            <h4>Profile</h4>
+            <a href='<%= "http://github.com/#{user.nickname}" %>' target="_blank">github/<%= user.nickname %></a>
           <% else %>
             <h2>
               Not Signed in!
             </h2>
           <% end %>
-          <h4>Profile</h4>
-          <a href='<%= "http://github.com/#{user.nickname}" %>' target="_blank">github/<%= user.nickname %></a>
         </div>
       </div>
     </div>
