@@ -1,4 +1,4 @@
-# Ruby on Rack [meetup link](http://www.meetup.com/tampa-rb/events/125327762/)
+# Ruby on Rack
 
 ## A super simple MVC web app built with Rack
 
